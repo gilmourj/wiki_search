@@ -7,7 +7,7 @@ import csv
 class WebPage:
     def __init__(self, url, index, links):
         self.url = url #string url
-        self.title = url[29:] #string webpage title from url
+        self.title = url[6:] #string webpage title from url
         self.index = index #int index (unique id)
         self.links = links #list of webpages
 
@@ -78,13 +78,16 @@ if __name__ == "__main__":
     #this will index every major page reachable from iron man (most of the major pages on the site)
 
     for page in pages:
-        for link in page.links:
-            if link not in checked_urls:
-                dex += 1
-                pages.append(make_page(link, dex))
-                print("indexing ", dex, " ", link)
+        if page != None:
+            for link in page.links:
+                if link != None:
+                    if link not in checked_urls:
+                        dex += 1
+                        pages.append(make_page(link, dex))
+                        print("indexing ", dex, " ", link)
+
 
     #save pages
-    with open("results.csv", 'w') as output:
+    with open("smallresults.csv", 'w') as output:
         w = csv.writer(output, quoting=csv.QUOTE_ALL)
         w.writerows([p.title, p.url, p.index, p.links] for p in pages)

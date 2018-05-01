@@ -14,26 +14,9 @@ class WebPage:
 #only index some link types
 def is_valid(url):
     """given an internal /wiki/ link, determine if it is valid for scraping"""
-    #if the wiki page is a category not an article
-    if '/wiki/Category:' in url:
-        return False
-    #if the wiki page is a file not an article
-    if '/wiki/File:' in url:
-        return False
-    #if the wiki page is a glossary not an article
-    if '/wiki/Glossary:' in url:
-        return False
-    #if the wiki page is special not an article
-    if '/wiki/Special:' in url:
-        return False
-    #remove all pages that are for individual comics
-    if '_Vol_' in url:
-        return False
-    if '_Season_' in url:
-        return False
-    #if internal (same page) link
-    if '#' in url:
-        return False
+    for s in invalid_snippets:
+        if s in url:
+            return False
     return True
 
 #get all valid links from a marvel wikia page
@@ -60,7 +43,7 @@ def make_page(init_url, index):
             continue #to next link
         #Filter links to only internal wiki links
         if '/wiki/' in url and 'http' not in url:
-            #drop ?...
+            url = url.split('?')[0] # drop arguments
             if is_valid(url):
                 page.links.append(url)
     checked_urls.append(init_url)
@@ -72,11 +55,13 @@ if __name__ == "__main__":
     dex = 0
     checked_urls = [] #global, modified in make_page
     pages = []
+    invalid_snippets = ['/wiki/Category:', '/wiki/File:', '/wiki/Glossary:',
+                        '/wiki/Special:', '_Vol_', '_Season_', '#']
     pages.append(make_page('/wiki/Anthony_Stark_(Earth-616)', dex))
-    print(checked_urls)
+    #checked_urls append in make_page function
+
     #don't let this fool you: it is a while loop because it appends to the list as it moves through it
     #this will index every major page reachable from iron man (most of the major pages on the site)
-
     for page in pages:
         if page != None:
             for link in page.links:
@@ -85,9 +70,11 @@ if __name__ == "__main__":
                         dex += 1
                         pages.append(make_page(link, dex))
                         print("indexing ", dex, " ", link)
+                    else:
+                        print("already indexed ", link)
 
 
     #save pages
-    with open("smallresults.csv", 'w') as output:
+    with open("results.csv", 'w') as output:
         w = csv.writer(output, quoting=csv.QUOTE_ALL)
         w.writerows([p.title, p.url, p.index, p.links] for p in pages)

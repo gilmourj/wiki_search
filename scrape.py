@@ -7,7 +7,7 @@ import csv
 class WebPage:
     def __init__(self, url, index, links):
         self.url = url #string url
-        self.title = url[29:] #string webpage title from url
+        self.title = url[6:] #string webpage title from url
         self.index = index #int index (unique id)
         self.links = links #list of webpages
         self.outbounds = []
@@ -81,14 +81,15 @@ if __name__ == "__main__":
     #this will index every major page reachable from iron man (most of the major pages on the site)
 
     for page in pages:
-        for link in page.links:
-            if link not in checked_urls:
-                dex += 1
-                # Break when we index 500 pages (for testing purpose only)
-                if dex >= 500:
-                    break
-                pages.append(make_page(link, dex))
-                print("indexing ", dex, " ", link)
+        if page != None:
+            for link in page.links:
+                if link != None:
+                    if link not in checked_urls:
+                        dex += 1
+                        if dex >= 600:
+                            break
+                        pages.append(make_page(link, dex))
+                        print("indexing ", dex, " ", link)
 
     #Construct a list of scraped links to enable indexing later
     links=[]
@@ -104,6 +105,6 @@ if __name__ == "__main__":
                 page.outbounds.append('nil')
 
     #save pages
-    with open("results.csv", 'w') as output:
+    with open("smallresults.csv", 'w') as output:
         w = csv.writer(output, quoting=csv.QUOTE_ALL)
         w.writerows([p.title, p.url, p.index, p.outbounds, p.links] for p in pages)

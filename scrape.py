@@ -10,6 +10,7 @@ class WebPage:
         self.title = url[29:] #string webpage title from url
         self.index = index #int index (unique id)
         self.links = links #list of webpages
+        self.outbounds = []
 
 #only index some link types
 def is_valid(url):
@@ -53,6 +54,8 @@ def make_page(init_url, index):
             article = art
     #make page
     page = WebPage(init_url, index, [])
+    title = soup.find('h1', {'class':'page-header__title'})
+    page.title = title.text
     for link in article.find_all('a'):
         url = link.get('href')
         #Sometimes bs4 messes up and gives none instead of a string
@@ -81,10 +84,26 @@ if __name__ == "__main__":
         for link in page.links:
             if link not in checked_urls:
                 dex += 1
+                # Break when we index 500 pages (for testing purpose only)
+                if dex >= 500:
+                    break
                 pages.append(make_page(link, dex))
                 print("indexing ", dex, " ", link)
+
+    #Construct a list of scraped links to enable indexing later
+    links=[]
+    for page in pages:
+        links.append(page.url)
+
+    #Create outbound indices for each webpage for matrix storage
+    for page in pages:
+        for link in page.links:
+            if link in links:
+                page.outbounds.append(links.index(link))
+            else:
+                page.outbounds.append('nil')
 
     #save pages
     with open("results.csv", 'w') as output:
         w = csv.writer(output, quoting=csv.QUOTE_ALL)
-        w.writerows([p.title, p.url, p.index, p.links] for p in pages)
+        w.writerows([p.title, p.url, p.index, p.outbounds, p.links] for p in pages)

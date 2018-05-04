@@ -85,7 +85,7 @@ if __name__ == "__main__":
     print(len(avengers))
     #save pages
     with open("avengers.csv", 'w') as output:
-        w = csv.writer(output, quoting=csv.QUOTE_ALL)
+        w = csv.writer(output, quoting=csv.QUOTE_ALL, delimiter='|')
         for p in pages:
             if p is not None:
                 w.writerow([p.title, p.url, p.index, p.links])

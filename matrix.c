@@ -3,7 +3,7 @@
 #include <string.h>
 
 #define BUFFER_SIZE 1024
-#define NUM_PAGES 512
+#define NUM_PAGES 1024
 typedef struct link {
     char* link;
     struct link* next;
@@ -20,7 +20,12 @@ typedef struct page {
     list_t *links;
 } page_t;
 
-int* parse_data(char *data) {
+typedef struct outbound_list {
+	int *data;
+	int size;
+} outbound_list_t;
+
+outbound_list_t* parse_data(char *data) {
 	char *number;
 	static int num[NUM_PAGES];
 	int count = 0;
@@ -29,9 +34,12 @@ int* parse_data(char *data) {
 		num[count] = atoi(number);
 		count++;	
 	}
-	number = strtok(NULL, "]");
-	num[count] = atoi(number);
-	return num;
+	outbound_list_t* list = malloc(sizeof(outbound_list_t));
+	list->data = num;
+	list->size = count;
+	//number = strtok(NULL, "]");
+	//num[count] = atoi(number);
+	return list;
 }
 
 int main(int argc, char *argv[]) {
@@ -68,11 +76,12 @@ int main(int argc, char *argv[]) {
 		data = strtok(NULL, "|");
 		//List of outbound links
 		//printf("\t %s \n", data);
-		int *links = parse_data(data);
+		outbound_list_t* list = parse_data(data);
 		//print
-		for(int i=0;i<NUM_PAGES;i++) {
-			printf("%d ", *(links + i));
+		for(int i=0;i<list->size;i++) {
+			printf("%d ", *(list->data + i));
 		}
+		printf("\n\n");
 		line_count++;
 	}
 
@@ -80,5 +89,5 @@ int main(int argc, char *argv[]) {
 	 	printf("%s\n", names[i]);
 	}
 	return 0;
-
 }
+

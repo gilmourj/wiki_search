@@ -3,6 +3,7 @@
 #include <string.h>
 
 #define BUFFER_SIZE 1024
+#define NUM_PAGES 512
 typedef struct link {
     char* link;
     struct link* next;
@@ -19,6 +20,20 @@ typedef struct page {
     list_t *links;
 } page_t;
 
+int* parse_data(char *data) {
+	char *number;
+	static int num[NUM_PAGES];
+	int count = 0;
+	strtok(data, "[");
+	while ((number = strtok(NULL, ",")) != NULL) {
+		num[count] = atoi(number);
+		count++;	
+	}
+	number = strtok(NULL, "]");
+	num[count] = atoi(number);
+	return num;
+}
+
 int main(int argc, char *argv[]) {
 	if (argc != 2) {
 		perror("Invalid syntax: matrix [filename]\n");
@@ -33,31 +48,37 @@ int main(int argc, char *argv[]) {
 		exit(2);
 	}
 	// Array of Marvel Character Names
-	char **names = malloc(sizeof(char*) * 512);
+	char *names[NUM_PAGES];
 	// Allocate line buffer
 	//char buffer[BUFFER_SIZE];
 	char *buffer = NULL;
 	size_t linecap = 0;
 	size_t len;
 	int line_count = 0;
-	while ((len = getline(&buffer, &linecap, csvStream)) > 0 && line_count <= 50) {
+	while ((len = getline(&buffer, &linecap, csvStream)) > 0 && line_count <= 1) {
 		char *data = strtok(buffer, "|");
-		printf("%s ", data);
+	  //printf("%s ", data);
+		names[line_count] = malloc(sizeof(char) * BUFFER_SIZE);
+		strncpy(names[line_count], buffer, BUFFER_SIZE);
 		data = strtok(NULL, "|");
 		data = strtok(NULL, "|");
-		printf("\t %s ", data);
+		//Index of the webpage
+		//printf("\t %s ", data);
 		data = strtok(NULL, "|");
 		data = strtok(NULL, "|");
-		printf("\t %s \n", data);
-		//strncpy(names[line_count], buffer, BUFFER_SIZE);
-		//data = strtok(NULL, "|");
-		//printf("\t'%s'\n", data);
+		//List of outbound links
+		//printf("\t %s \n", data);
+		int *links = parse_data(data);
+		//print
+		for(int i=0;i<NUM_PAGES;i++) {
+			printf("%d ", *(links + i));
+		}
 		line_count++;
 	}
 
-	// for (int i=0;i<line_count;i++) {
-	// 	printf("%s\n", names[i]);
-	// }
+	for (int i=0;i<line_count;i++) {
+	 	printf("%s\n", names[i]);
+	}
 	return 0;
 
 }

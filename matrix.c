@@ -42,16 +42,22 @@ int main(int argc, char *argv[]) {
 	int line_count = 0;
 	while ((len = getline(&buffer, &linecap, csvStream)) > 0 && line_count <= 50) {
 		char *data = strtok(buffer, "|");
-		printf("\t'%s'\n", data);
+		printf("%s ", data);
+		data = strtok(NULL, "|");
+		data = strtok(NULL, "|");
+		printf("\t %s ", data);
+		data = strtok(NULL, "|");
+		data = strtok(NULL, "|");
+		printf("\t %s \n", data);
 		//strncpy(names[line_count], buffer, BUFFER_SIZE);
 		//data = strtok(NULL, "|");
 		//printf("\t'%s'\n", data);
 		line_count++;
 	}
 
-	for (int i=0;i<line_count;i++) {
-		printf("%s\n", names[i]);
-	}
+	// for (int i=0;i<line_count;i++) {
+	// 	printf("%s\n", names[i]);
+	// }
 	return 0;
 
 }

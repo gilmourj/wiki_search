@@ -10,7 +10,6 @@ class WebPage:
         self.title = url[6:] #string webpage title from url
         self.index = index #int index (unique id)
         self.links = links #list of webpages
-        self.outbounds = []
 
 #only index some link types
 def is_valid(url):
@@ -37,8 +36,6 @@ def make_page(init_url, index):
             article = art
     #make page
     page = WebPage(init_url, index, [])
-    title = soup.find('h1', {'class':'page-header__title'})
-    page.title = title.text
     for link in article.find_all('a'):
         url = link.get('href')
         #Sometimes bs4 messes up and gives none instead of a string
@@ -53,45 +50,42 @@ def make_page(init_url, index):
     return page
 
 if __name__ == "__main__":
-    #scrape this link http://marvel.wikia.com/wiki/Anthony_Stark_(Earth-616)
-    #only data from article id WikiaMainContent
+    """scrape this link http://marvel.wikia.com/wiki/Avengers_(Earth-616), only
+    data from article id WikiaMainContent, only links from subpages to other
+    subpages of avengers"""
+
     dex = 0
     checked_urls = [] #global, modified in make_page
     pages = []
     invalid_snippets = ['/wiki/Category:', '/wiki/File:', '/wiki/Glossary:',
                         '/wiki/Special:', '_Vol_', '_Season_', '#']
-    pages.append(make_page('/wiki/Anthony_Stark_(Earth-616)', dex))
+    pages.append(make_page('/wiki/Avengers_(Earth-616)', dex))
     #checked_urls append in make_page function
 
+    avengers = pages[0].links #limit to results of first scrape
+    avengers.append('/wiki/Avengers_(Earth-616)')
+    print(len(avengers))
     #don't let this fool you: it is a while loop because it appends to the list as it moves through it
-    #this will index every major page reachable from iron man (most of the major pages on the site)
+    #this will index every sub-page from the avengers main page
     for page in pages:
         if page != None:
             for link in page.links:
                 if link != None:
-                    if link not in checked_urls:
-                        dex += 1
-                        if dex >= 600:
-                            break
-                        pages.append(make_page(link, dex))
-                        print("indexing ", dex, " ", link)
+                    if link in avengers:
+                        if link not in checked_urls:
+                            dex += 1
+                            pages.append(make_page(link, dex))
+                            print("indexing ", dex, " ", link)
+                        else:
+                            print("already indexed ", link)
                     else:
-                        print("already indexed ", link)
+                        print("not an avenger ", link)
 
-    #Construct a list of scraped links to enable indexing later
-    links=[]
-    for page in pages:
-        links.append(page.url)
 
-    #Create outbound indices for each webpage for matrix storage
-    for page in pages:
-        for link in page.links:
-            if link in links:
-                page.outbounds.append(links.index(link))
-            else:
-                page.outbounds.append('nil')
-
+    print(len(avengers))
     #save pages
-    with open("results.csv", 'w') as output:
-        w = csv.writer(output, quoting=csv.QUOTE_ALL)
-        w.writerows([p.title, p.url, p.index, p.outbounds, p.links] for p in pages)
+    with open("avengers.csv", 'w') as output:
+        w = csv.writer(output, quoting=csv.QUOTE_ALL, delimiter='|')
+        for p in pages:
+            if p is not None:
+                w.writerow([p.title, p.url, p.index, p.links])

@@ -5,13 +5,14 @@ import csv
 
 if __name__ == "__main__":
     avengers = pd.read_csv("avengers.csv", sep='|', header=None)
-    links = ast.literal_eval(avengers.iloc[0][3])
+    #list(set()) drops repeats
+    links = list(set(ast.literal_eval(avengers.iloc[0][3])))
     i = 0
     all_nums = []
     for n in range(0, avengers.shape[0]):
         row = avengers.iloc[n]
         nums = []
-        for link in ast.literal_eval(row[3]):
+        for link in list(set(ast.literal_eval(row[3]))):
             nums.append(links.index(link))
 
         all_nums.append(nums)

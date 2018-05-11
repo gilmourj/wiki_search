@@ -4,6 +4,9 @@
 
 #define BUFFER_SIZE 1024
 #define NUM_PAGES 473
+#define NUM_TEST 473
+#define NUM_ITER 2
+
 typedef struct link {
     char* link;
     struct link* next;
@@ -24,6 +27,36 @@ typedef struct outbound_list {
 	int data[NUM_PAGES];
 	int size;
 } outbound_list_t;
+
+// This function multiplies mat1[][] and mat2[][],
+// and stores the result in res[][]
+//void multiply(int mat1[][], int mat2[][], int res[][], int N) {
+//	int i, j, k;
+//	for (i = 0; i < N; i++) {
+//		for (j = 0; j < N; j++) {
+//			res[i][j] = 0;
+//			for (k = 0; k < N; k++)
+//				res[i][j] += mat1[i][k]*mat2[k][j];
+//		}
+//	}
+//}
+
+// Printing the result
+void print_vec(double resVec[], int size) {
+	for (int i=0;i<size;i++) {
+		printf("%.10f\n", resVec[i]);
+	}
+}
+
+// Multiply matrix with vector
+void multiply_vec(double mat1[][NUM_TEST], double mat2[], double res[], int N) {
+	int i, j, k;
+	for (i = 0; i < N; i++) {
+			res[i] = 0;
+			for (k = 0; k < N; k++)
+				res[i] += mat1[i][k]*mat2[k];
+	}
+}
 
 outbound_list_t* parse_data(char *data) {
 	char *number;
@@ -114,9 +147,24 @@ int main(int argc, char *argv[]) {
 	// Testing
 	for (int j=0;j<line_count;j++) {
 		for (int i=0;i<line_count;i++) {
-			printf("%.0f", pageMat[j][i]);
+			//printf("%.0f", pageMat[j][i]);
 		}
-		printf("\n");
+		//printf("\n");
+	}
+
+	// Create the initial state vector
+	double initialMat[line_count];
+	for (int i=0;i<line_count;i++) {
+		initialMat[i] = (double) (1.0/line_count);
+	}
+	// Create resulting matrix
+	double resVec[line_count];
+	// Multiply the matrices!!!
+	for (int i=0;i<NUM_ITER;i++) {
+		multiply_vec(pageMat, initialMat, resVec, line_count);
+		memcpy(initialMat, resVec, sizeof(double) * line_count);
+		print_vec(initialMat, line_count);
+		printf("################## SOME LINE BREAK HERE #####################----------!!!!!!!!\n");
 	}
 
 	return 0;

@@ -81,7 +81,7 @@ outbound_list_t* parse_data(char *data) {
 	list->size = count;
 	return list;
 }
-
+//TODO: change to make_matrix, parameter char * filename
 int main(int argc, char *argv[]) {
 	if (argc != 2) {
 		perror("Invalid syntax: matrix [filename]\n");

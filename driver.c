@@ -1,6 +1,8 @@
 #include <stdio.h>
+#include <stdbool.h>
 
 #include "matrix.h"
+#include "ui.h"
 
 #define BUFFER_SIZE 128
 #define NUM_RESULTS 8
@@ -14,7 +16,7 @@ int main(int argc, char* argv[]) {
 		perror("Invalid syntax: driver [filename] (num_results)\n");
 		exit(2);
 	}
-  //initialize UI (from networks lab)
+  ui_init();
   //make matrix && calculate pagerank
   make_matrix(argv[1]);
   //while running:
@@ -24,15 +26,15 @@ int main(int argc, char* argv[]) {
     scanf("%s", input); // limit this to buffer size
     //find entry point page (matching title)
     if (strcmp(input, "quit") == 0) {
-      //clean up
+      ui_shutdown();
       return 0;
     }
-    else if input in list_of_names {
+    /*else if input in list_of_names {
       //while num_results < desired:
         //for each nth-level connection: //small dataset means we may move beyond first
           //arrange in order of pagerank within level
       //print results (links preferably)
-    }
+    }*/
     else {
       printf(input);
       printf(" is not known to The Avengers");

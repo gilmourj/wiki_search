@@ -1,11 +1,12 @@
+#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 #define BUFFER_SIZE 1024
 #define NUM_PAGES 473
-#define NUM_TEST 473
 #define NUM_ITER 2
+#define P_VAL .15
 
 typedef struct link {
     char* link;
@@ -28,19 +29,6 @@ typedef struct outbound_list {
 	int size;
 } outbound_list_t;
 
-// This function multiplies mat1[][] and mat2[][],
-// and stores the result in res[][]
-//void multiply(int mat1[][], int mat2[][], int res[][], int N) {
-//	int i, j, k;
-//	for (i = 0; i < N; i++) {
-//		for (j = 0; j < N; j++) {
-//			res[i][j] = 0;
-//			for (k = 0; k < N; k++)
-//				res[i][j] += mat1[i][k]*mat2[k][j];
-//		}
-//	}
-//}
-
 // Printing the result
 void print_vec(double resVec[], int size) {
 	for (int i=0;i<size;i++) {
@@ -48,14 +36,37 @@ void print_vec(double resVec[], int size) {
 	}
 }
 
-// Multiply matrix with vector
-void multiply_vec(double mat1[][NUM_TEST], double mat2[], double res[], int N) {
-	int i, j, k;
+// Multiply vetor by matrix
+void multiply_vec(double mat1[], double mat2[][NUM_PAGES], double res[], int N) {
+	int i, k;
 	for (i = 0; i < N; i++) {
 			res[i] = 0;
 			for (k = 0; k < N; k++)
-				res[i] += mat1[i][k]*mat2[k];
+				res[i] += mat1[k]*mat2[k][i];
 	}
+}
+
+// Max difference between 2 vectors
+double max_diff(double v1[], double v2[], int size) {
+	double max = 0.0;
+	for (int i=0;i<size;i++) {
+		double diff = fabs(v2[i] - v1[i]);
+		if (diff > max) max = diff;
+	}
+	return max;
+}
+
+// Max index in a vector
+int max_index(double v[], int size) {
+	int index = 0;
+	double max = 0.0;
+	for (int i=0;i<size;i++) {
+		if (v[i] > max) {
+			max = v[i];
+			index = i;
+		}
+	}
+	return index;
 }
 
 outbound_list_t* parse_data(char *data) {
@@ -128,18 +139,16 @@ int main(int argc, char *argv[]) {
 		}
 	}
 
+	// Declare a row count array for normalization later
+	int row_counts[line_count];
 	// Fill it up!
 	for (int row=0;row<line_count;row++) {
 		outbound_list_t* list = adjacency_lists[row];
-
+		row_counts[row] = list->size;
 		for (int col=0;col<list->size;col++) {
 				int data = list->data[col];
-				// Temporary index bound check --- DELETE LATER
-				if (data < line_count) {
 				// Set the field to 1
 				pageMat[row][data] = 1.0;
-				}
-				else break;
 		}
 		free(adjacency_lists[row]);
 	}
@@ -152,20 +161,43 @@ int main(int argc, char *argv[]) {
 		//printf("\n");
 	}
 
+	double stochastic = (double) (1.0/line_count);
+	// Normalize the Matrix!
+	for (int row=0;row<line_count;row++) {
+		double normal;
+		if (row_counts[row] == 0.0) normal = 0.0;
+		else normal = (double) (1.0/row_counts[row]);
+		for (int col=0;col<line_count;col++) {
+			if (pageMat[row][col] >= .5) {
+				pageMat[row][col] = (double) ((1.0 - P_VAL) * normal + P_VAL * stochastic);
+			} else {
+				pageMat[row][col] = (double) (P_VAL * stochastic);
+			}
+		}
+	}
+
 	// Create the initial state vector
-	double initialMat[line_count];
+	double initialVec[line_count];
 	for (int i=0;i<line_count;i++) {
-		initialMat[i] = (double) (1.0/line_count);
+		initialVec[i] = stochastic;
 	}
 	// Create resulting matrix
 	double resVec[line_count];
 	// Multiply the matrices!!!
-	for (int i=0;i<NUM_ITER;i++) {
-		multiply_vec(pageMat, initialMat, resVec, line_count);
-		memcpy(initialMat, resVec, sizeof(double) * line_count);
-		print_vec(initialMat, line_count);
-		printf("################## SOME LINE BREAK HERE #####################----------!!!!!!!!\n");
+	// for (int i=0;i<NUM_ITER;i++) {
+	double max_err = 1.0;
+	while (max_err > .001) {
+		multiply_vec(initialVec, pageMat, resVec, line_count);
+		max_err = max_diff(initialVec, resVec, line_count);
+		memcpy(initialVec, resVec, sizeof(double) * line_count);
 	}
+
+	print_vec(initialVec, line_count);
+	printf("################## SOME LINE BREAK HERE #####################----------!!!!!!!!\n");
+	int maximum_index = max_index(initialVec, line_count);
+	printf("The max index is: %d\n", maximum_index);
+	printf("The page name is: %s\n", names[maximum_index]);
+	printf("And its value is: %.10f\n\n", initialVec[maximum_index]);
 
 	return 0;
 }

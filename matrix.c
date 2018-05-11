@@ -3,7 +3,7 @@
 #include <string.h>
 
 #define BUFFER_SIZE 1024
-#define NUM_PAGES 1024
+#define NUM_PAGES 473
 #define NUM_TEST 473
 #define NUM_ITER 2
 
@@ -65,7 +65,7 @@ outbound_list_t* parse_data(char *data) {
 	outbound_list_t* list = malloc(sizeof(outbound_list_t));
 	while ((number = strtok(NULL, ",")) != NULL) {
 		list->data[count] = atoi(number);
-		count++;	
+		count++;
 	}
 	list->size = count;
 	return list;
@@ -94,7 +94,7 @@ int main(int argc, char *argv[]) {
 	int line_count = 0;
 	// Array of adjacency lists
 	outbound_list_t* adjacency_lists[NUM_PAGES];
-	while ((len = getline(&buffer, &linecap, csvStream)) > 0 && line_count < NUM_TEST) {
+	while ((len = getline(&buffer, &linecap, csvStream)) > 0 && line_count < NUM_PAGES) {
 		char *data = strtok(buffer, "|");
 	  //printf("%s ", data);
 		names[line_count] = malloc(sizeof(char) * BUFFER_SIZE);
@@ -127,7 +127,7 @@ int main(int argc, char *argv[]) {
 			pageMat[j][i] = 0.0;
 		}
 	}
-	
+
 	// Fill it up!
 	for (int row=0;row<line_count;row++) {
 		outbound_list_t* list = adjacency_lists[row];
@@ -135,7 +135,7 @@ int main(int argc, char *argv[]) {
 		for (int col=0;col<list->size;col++) {
 				int data = list->data[col];
 				// Temporary index bound check --- DELETE LATER
-				if (data < line_count) { 
+				if (data < line_count) {
 				// Set the field to 1
 				pageMat[row][data] = 1.0;
 				}
@@ -167,8 +167,5 @@ int main(int argc, char *argv[]) {
 		printf("################## SOME LINE BREAK HERE #####################----------!!!!!!!!\n");
 	}
 
-  	
-
 	return 0;
 }
-

@@ -19,9 +19,10 @@ int main(int argc, char* argv[]) {
 		exit(2);
 	}
   //initialize UI
-  ui_init();
+  //ui_init();
   //make matrix && calculate pagerank
   char *addr = argv[1];
+
   construct_matrix(addr);
   //make_matrix(argv[1]);
   //while running:

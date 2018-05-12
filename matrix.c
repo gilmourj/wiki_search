@@ -5,25 +5,9 @@
 
 #define BUFFER_SIZE 1024
 #define NUM_PAGES 473
-#define NUM_ITER 2
 #define P_VAL .15
 
-typedef struct link {
-    char* link;
-    struct link* next;
-} link_t;
-
-typedef struct list {
-    link_t *head;
-} list_t;
-
-typedef struct page {
-    char * name;
-    char * link;
-    int index;
-    list_t *links;
-} page_t;
-
+// Struct for outbound links from a page
 typedef struct outbound_list {
 	int data[NUM_PAGES];
 	int size;
@@ -81,7 +65,7 @@ outbound_list_t* parse_data(char *data) {
 	list->size = count;
 	return list;
 }
-//TODO: change to make_matrix, parameter char * filename
+
 int main(int argc, char *argv[]) {
 	if (argc != 2) {
 		perror("Invalid syntax: matrix [filename]\n");
@@ -184,7 +168,6 @@ int main(int argc, char *argv[]) {
 	// Create resulting matrix
 	double resVec[line_count];
 	// Multiply the matrices!!!
-	// for (int i=0;i<NUM_ITER;i++) {
 	double max_err = 1.0;
 	while (max_err > .001) {
 		multiply_vec(initialVec, pageMat, resVec, line_count);
@@ -198,6 +181,14 @@ int main(int argc, char *argv[]) {
 	printf("The max index is: %d\n", maximum_index);
 	printf("The page name is: %s\n", names[maximum_index]);
 	printf("And its value is: %.10f\n\n", initialVec[maximum_index]);
+
+	printf("Let's print out some higher ranked Heroes::::::\n");
+	for (int i=0;i<line_count;i++) {
+		if (initialVec[i] > .01) {
+			printf("%s ", names[i]);
+		}
+	}
+	printf("\n");
 
 	return 0;
 }

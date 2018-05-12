@@ -1,4 +1,6 @@
 #include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
 #include <stdbool.h>
 
 #include "matrix.h"
@@ -10,15 +12,16 @@
 int main(int argc, char* argv[]) {
   int num_results = NUM_RESULTS;
   if (argc == 3) {
-    num_results = strtoi(argv[2]);
+    num_results = atoi(argv[2]);
   }
   else if (argc != 2) { //the third is an optional parameter
 		perror("Invalid syntax: driver [filename] (num_results)\n");
 		exit(2);
 	}
+  //initialize UI
   ui_init();
   //make matrix && calculate pagerank
-  make_matrix(argv[1]);
+  //make_matrix(argv[1]);
   //while running:
   while(true) {
     //query user input
@@ -36,7 +39,7 @@ int main(int argc, char* argv[]) {
       //print results (links preferably)
     }*/
     else {
-      printf(input);
+      printf("%s", input);
       printf(" is not known to The Avengers");
       continue;
     }

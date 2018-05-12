@@ -3,31 +3,11 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "matrix.h"
+
 #define BUFFER_SIZE 1024
-#define NUM_PAGES 473
 #define NUM_ITER 2
 #define P_VAL .15
-
-typedef struct link {
-    char* link;
-    struct link* next;
-} link_t;
-
-typedef struct list {
-    link_t *head;
-} list_t;
-
-typedef struct page {
-    char * name;
-    char * link;
-    int index;
-    list_t *links;
-} page_t;
-
-typedef struct outbound_list {
-	int data[NUM_PAGES];
-	int size;
-} outbound_list_t;
 
 // Printing the result
 void print_vec(double resVec[], int size) {

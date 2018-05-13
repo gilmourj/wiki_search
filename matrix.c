@@ -3,21 +3,19 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "matrix.h"
+
 #define BUFFER_SIZE 1024
 #define NUM_PAGES 473
 #define P_VAL .15
-
-// Struct for outbound links from a page
-typedef struct outbound_list {
-	int data[NUM_PAGES];
-	int size;
-} outbound_list_t;
 
 // Printing the result
 void print_vec(double resVec[], int size) {
 	for (int i=0;i<size;i++) {
 		printf("%.10f\n", resVec[i]);
 	}
+
+	printf("%s", "printed vectors");
 }
 
 // Multiply vetor by matrix
@@ -66,13 +64,7 @@ outbound_list_t* parse_data(char *data) {
 	return list;
 }
 
-int main(int argc, char *argv[]) {
-	if (argc != 2) {
-		perror("Invalid syntax: matrix [filename]\n");
-		exit(2);
-	}
-	// Read csv file address from command line argument
-	char *addr = argv[1];
+int construct_matrix(char *addr) {
 	// Read CSV file
 	FILE *csvStream = fopen(addr, "r");
 	if (csvStream == NULL) {
@@ -174,7 +166,7 @@ int main(int argc, char *argv[]) {
 		max_err = max_diff(initialVec, resVec, line_count);
 		memcpy(initialVec, resVec, sizeof(double) * line_count);
 	}
-
+	
 	print_vec(initialVec, line_count);
 	printf("################## SOME LINE BREAK HERE #####################----------!!!!!!!!\n");
 	int maximum_index = max_index(initialVec, line_count);

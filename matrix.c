@@ -167,6 +167,7 @@ int construct_matrix(char *addr) {
 		memcpy(initialVec, resVec, sizeof(double) * line_count);
 	}
 	
+	/*
 	print_vec(initialVec, line_count);
 	printf("################## SOME LINE BREAK HERE #####################----------!!!!!!!!\n");
 	int maximum_index = max_index(initialVec, line_count);
@@ -181,6 +182,7 @@ int construct_matrix(char *addr) {
 		}
 	}
 	printf("\n");
+	*/
 
 	return 0;
 }

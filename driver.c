@@ -19,37 +19,27 @@ int main(int argc, char* argv[]) {
 		exit(2);
 	}
   //initialize UI
-  //ui_init();
+  ui_init();
   //make matrix && calculate pagerank
   char *addr = argv[1];
-
   construct_matrix(addr);
   //make_matrix(argv[1]);
   char* names[NUM_PAGES];
   get_names(addr, names);
   //while running:
   while(true) {
-    //query user input
-    char input[BUFFER_SIZE];
-    scanf("%s", input); // limit this to buffer size
+    char* message = ui_read_input();
     //find entry point page (matching title)
-    if (strcmp(input, "quit") == 0) {
+    if (strcmp(message, "quit") == 0) {
       ui_shutdown();
       return 0;
     }
     else {
-      int index = 0;
-      if (index != -1) {
-        //while num_results < desired:
-          //for each nth-level connection: //small dataset means we may move beyond first
-            //arrange in order of pagerank within level
-        //print results (links preferably)
-      }
-      else {
-        printf("%s", input);
-        printf(" is not known to The Avengers");
-        continue;
-      }
+      char* output_message = strcat(message, " is not known to The Avengers");
+      ui_add_message(NULL, output_message);
+      ui_clear_input();
+      free(message);
+      continue;
     }
     //repeat to allow for new search or quit
   }

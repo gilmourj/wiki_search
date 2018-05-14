@@ -26,6 +26,9 @@ void ui_add_message(char* username, char* message);
  */
 char* ui_read_input();
 
+// Clear the input window (refresh required)
+void ui_clear_input();
+
 /**
  * Shut down the user interface. Call this once during shutdown.
  */

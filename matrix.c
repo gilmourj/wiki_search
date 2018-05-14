@@ -84,11 +84,6 @@ void get_names(char* addr, char* names[NUM_PAGES]) {
 		//make list of names
 		names[line_count] = (char*) malloc(sizeof(char) * BUFFER_SIZE);
 		strncpy(names[line_count], buffer, BUFFER_SIZE);
-		//get through the rest of the stuff
-		data = strtok(NULL, "|");
-		data = strtok(NULL, "|");
-		data = strtok(NULL, "|");
-		data = strtok(NULL, "|");
 		line_count++;
 	}
 	return;
@@ -110,6 +105,7 @@ int construct_matrix(char *addr, double initialVec[]) {
 	outbound_list_t* adjacency_lists[NUM_PAGES];
 	while ((len = getline(&buffer, &linecap, csvStream)) > 0 && line_count < NUM_PAGES) {
 		char *data = strtok(buffer, "|");
+		//get through the rest of the stuff
 		data = strtok(NULL, "|");
 		data = strtok(NULL, "|");
 		data = strtok(NULL, "|");
@@ -151,14 +147,13 @@ int construct_matrix(char *addr, double initialVec[]) {
 	double stochastic = (double) (1.0/line_count);
 	// Normalize the Matrix!
 	for (int row=0;row<line_count;row++) {
-		double normal;
-		if (row_counts[row] == 0.0) normal = 0.0;
-		else normal = (double) (1.0/row_counts[row]);
-		for (int col=0;col<line_count;col++) {
-			if (pageMat[row][col] >= .5) {
-				pageMat[row][col] = (double) ((1.0 - P_VAL) * normal + P_VAL * stochastic);
-			} else {
-				pageMat[row][col] = (double) (P_VAL * stochastic);
+		if (row_counts[row] == 0) { 
+			for (int col=0;col<line_count;col++) {
+				pageMat[row][col] = stochastic;
+			}
+		} else {
+			for (int col=0;col<line_count;col++) {
+				pageMat[row][col] = (double) ((1.0 - P_VAL) * pageMat[row][col]/row_counts[row] + P_VAL * stochastic);
 			}
 		}
 	}
@@ -176,23 +171,6 @@ int construct_matrix(char *addr, double initialVec[]) {
 		max_err = max_diff(initialVec, resVec, line_count);
 		memcpy(initialVec, resVec, sizeof(double) * line_count);
 	}
-
-	/*
-	print_vec(initialVec, line_count);
-	printf("################## SOME LINE BREAK HERE #####################----------!!!!!!!!\n");
-	int maximum_index = max_index(initialVec, line_count);
-	printf("The max index is: %d\n", maximum_index);
-	printf("The page name is: %s\n", names[maximum_index]);
-	printf("And its value is: %.10f\n\n", initialVec[maximum_index]);
-
-	printf("Let's print out some higher ranked Heroes::::::\n");
-	for (int i=0;i<line_count;i++) {
-		if (initialVec[i] > .01) {
-			printf("%s ", names[i]);
-		}
-	}
-	printf("\n");
-	*/
 
 	return 0;
 }

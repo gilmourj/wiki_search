@@ -55,12 +55,12 @@ int main(int argc, char* argv[]) {
 			search_session++;
 			ui_add_message("Google 0.5 Presents to you : ", initial_msg);
 			//list of found relevant pages denoted by their indices
-			int result_pages[10] = {-1};
+			int result_pages[num_results*256];
 			int page_count = 0;
       //see if the input is a substring of any name (lowercase everything)
       bool found = false;
       for (int i=0; i<NUM_PAGES; i++) {
-        if (strstr(names[i], message) != NULL && page_count < 10) {
+        if (strstr(names[i], message) != NULL && page_count < num_results) {
           found = true;
 					result_pages[page_count] = i;
 					page_count++;

@@ -60,7 +60,7 @@ int main(int argc, char* argv[]) {
       //see if the input is a substring of any name (lowercase everything)
       bool found = false;
       for (int i=0; i<NUM_PAGES; i++) {
-        if (strstr(names[i], message) != NULL) {
+        if (strstr(names[i], message) != NULL && page_count < 10) {
           found = true;
 					result_pages[page_count] = i;
 					page_count++;

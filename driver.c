@@ -15,7 +15,7 @@ int main(int argc, char* argv[]) {
   if (argc == 3) {
     num_results = atoi(argv[2]);
     if (num_results > NUM_PAGES) {
-      num_results = NUM_PAGES
+      num_results = NUM_PAGES;
     }
   }
   else if (argc != 2) { //the third is an optional parameter

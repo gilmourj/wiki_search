@@ -4,7 +4,7 @@ import ast
 import csv
 
 if __name__ == "__main__":
-    avengers = pd.read_csv("avengers.csv", sep='|', header=None)
+    avengers = pd.read_csv("csv/avengers.csv", sep='|', header=None)
     #list(set()) drops repeats
     links = list(set(ast.literal_eval(avengers.iloc[0][3])))
     i = 0
@@ -22,4 +22,4 @@ if __name__ == "__main__":
         w = csv.writer(output, quoting=csv.QUOTE_ALL, delimiter='|')
         for i in range (0, len(all_nums)):
             r = avengers.iloc[i]
-            w.writerow([r[0], r[1], r[2], r[3], all_nums[i]])
+            w.writerow([r[0].lower(), r[1], r[2], r[3], all_nums[i]])

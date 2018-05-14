@@ -40,6 +40,6 @@ outbound_list_t* parse_data(char *data);
 
 void get_names(char* addr, char* names[NUM_PAGES]);
 
-int construct_matrix(char *addr);
+int construct_matrix(char *addr, double initialVec[]);
 
 #endif

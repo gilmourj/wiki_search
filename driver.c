@@ -22,10 +22,18 @@ int main(int argc, char* argv[]) {
   ui_init();
   //make matrix && calculate pagerank
   char *addr = argv[1];
-  construct_matrix(addr);
+	//appropriately sized vector for pageRank calculations
+	double rank_result[NUM_PAGES];
+	//compute Page Rank
+  construct_matrix(addr, rank_result);
   //make_matrix(argv[1]);
   char* names[NUM_PAGES];
   get_names(addr, names);
+
+	//starter messsage
+	char str[80];
+	sprintf(str, "Starting page rank calculation. I got : %.10f", rank_result[0]);  
+	ui_add_message(NULL, str);
   //while running:
   while(true) {
     char* message = ui_read_input();

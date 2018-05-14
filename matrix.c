@@ -94,17 +94,14 @@ void get_names(char* addr, char* names[NUM_PAGES]) {
 	return;
 }
 
-int construct_matrix(char *addr) {
+int construct_matrix(char *addr, double initialVec[]) {
 	// Read CSV file
 	FILE *csvStream = fopen(addr, "r");
 	if (csvStream == NULL) {
 		fprintf(stderr, "Error reading the csv file.");
 		exit(2);
 	}
-	// Array of Marvel Character Names
-	char *names[NUM_PAGES];
 	// Allocate line buffer
-	//char buffer[BUFFER_SIZE];
 	char *buffer = NULL;
 	size_t linecap = 0;
 	size_t len;
@@ -113,28 +110,12 @@ int construct_matrix(char *addr) {
 	outbound_list_t* adjacency_lists[NUM_PAGES];
 	while ((len = getline(&buffer, &linecap, csvStream)) > 0 && line_count < NUM_PAGES) {
 		char *data = strtok(buffer, "|");
-	  //printf("%s ", data);
-		names[line_count] = malloc(sizeof(char) * BUFFER_SIZE);
-		strncpy(names[line_count], buffer, BUFFER_SIZE);
 		data = strtok(NULL, "|");
 		data = strtok(NULL, "|");
-		//Index of the webpage
-		//printf("\t %s ", data);
 		data = strtok(NULL, "|");
 		data = strtok(NULL, "|");
-		//List of outbound links
-		//printf("\t %s \n", data);
 		adjacency_lists[line_count] = parse_data(data);
-		//print
-		//for(int i=0;i<adjacency_lists[line_count]->size;i++) {
-		//	printf("%d ", *(adjacency_lists[line_count]->data + i));
-		//}
-		//printf("\n\n");
 		line_count++;
-	}
-
-	for (int i=0;i<line_count;i++) {
-	 	//printf("%s\n", names[i]);
 	}
 
 	// Declare the PageRank matrix since we know it's line_count by line_count
@@ -181,9 +162,8 @@ int construct_matrix(char *addr) {
 			}
 		}
 	}
-
+	
 	// Create the initial state vector
-	double initialVec[line_count];
 	for (int i=0;i<line_count;i++) {
 		initialVec[i] = stochastic;
 	}

@@ -35,6 +35,7 @@ int main(int argc, char* argv[]) {
 	char str[80];
 	sprintf(str, "Starting page rank calculation. I got : %.10f", rank_result[0]);  
 	ui_add_message(NULL, str);
+	int search_session = 1;
 
   //while running:
   while(true) {
@@ -42,15 +43,20 @@ int main(int argc, char* argv[]) {
     for(int i=0; message[i]; i++) {
       message[i] = tolower(message[i]);
     }
-		//list of found relevant pages denoted by their indices
-		int result_pages[10] = {-1};
-		int page_count = 0;
     //find entry point page (matching title)
     if (strcmp(message, "quit") == 0) {
       ui_shutdown();
       return 0;
     }
     else {
+			//Welcome screen for each query
+			char initial_msg[50];
+			sprintf(initial_msg, "Search session #%d", search_session);
+			search_session++;
+			ui_add_message("Google 0.5 Presents to you : ", initial_msg);
+			//list of found relevant pages denoted by their indices
+			int result_pages[10] = {-1};
+			int page_count = 0;
       //see if the input is a substring of any name (lowercase everything)
       bool found = false;
       for (int i=0; i<NUM_PAGES; i++) {
@@ -72,7 +78,7 @@ int main(int argc, char* argv[]) {
       }
       else {
         char* output_message = strcat(message, " is not known to The Avengers");
-        ui_add_message(NULL, output_message);
+				ui_add_message(NULL, output_message);
         ui_clear_input();
         free(message);
         continue;

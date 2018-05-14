@@ -9,7 +9,7 @@
 #define WIDTH 78
 #define CHAT_HEIGHT 24
 #define INPUT_HEIGHT 1
-#define USERNAME_DISPLAY_MAX 8
+#define USERNAME_DISPLAY_MAX 64
 
 WINDOW* mainwin;
 WINDOW* chatwin;

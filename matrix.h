@@ -38,6 +38,8 @@ int max_index(double v[], int size);
 
 outbound_list_t* parse_data(char *data);
 
+void get_names(char* addr, char* names[NUM_PAGES]);
+
 int construct_matrix(char *addr);
 
 #endif

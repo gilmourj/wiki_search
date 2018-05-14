@@ -25,6 +25,8 @@ int main(int argc, char* argv[]) {
 
   construct_matrix(addr);
   //make_matrix(argv[1]);
+  char* names[NUM_PAGES];
+  get_names(addr, names);
   //while running:
   while(true) {
     //query user input
@@ -35,16 +37,19 @@ int main(int argc, char* argv[]) {
       ui_shutdown();
       return 0;
     }
-    /*else if input in list_of_names {
-      //while num_results < desired:
-        //for each nth-level connection: //small dataset means we may move beyond first
-          //arrange in order of pagerank within level
-      //print results (links preferably)
-    }*/
     else {
-      printf("%s", input);
-      printf(" is not known to The Avengers");
-      continue;
+      int index = 0;
+      if (index != -1) {
+        //while num_results < desired:
+          //for each nth-level connection: //small dataset means we may move beyond first
+            //arrange in order of pagerank within level
+        //print results (links preferably)
+      }
+      else {
+        printf("%s", input);
+        printf(" is not known to The Avengers");
+        continue;
+      }
     }
     //repeat to allow for new search or quit
   }

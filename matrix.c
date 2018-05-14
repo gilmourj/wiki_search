@@ -8,6 +8,7 @@
 #define BUFFER_SIZE 1024
 #define NUM_PAGES 473
 #define P_VAL .15
+#define INPUT_SIZE 128 //equal to BUFFER_SIZE in driver.c
 
 // Printing the result
 void print_vec(double resVec[], int size) {
@@ -62,6 +63,35 @@ outbound_list_t* parse_data(char *data) {
 	}
 	list->size = count;
 	return list;
+}
+
+void get_names(char* addr, char* names[NUM_PAGES]) {
+	FILE *csvStream = fopen(addr, "r");
+	if (csvStream == NULL) {
+		fprintf(stderr, "Error reading the csv file.");
+		exit(2);
+	}
+	// Allocate line buffer
+	//char buffer[BUFFER_SIZE];
+	char *buffer = NULL;
+	size_t linecap = 0;
+	size_t len;
+	int line_count = 0;
+	// Array of adjacency lists
+	outbound_list_t* adjacency_lists[NUM_PAGES];
+	while ((len = getline(&buffer, &linecap, csvStream)) > 0 && line_count < NUM_PAGES) {
+		char *data = strtok(buffer, "|");
+		//make list of names
+		names[line_count] = (char*) malloc(sizeof(char) * BUFFER_SIZE);
+		strncpy(names[line_count], buffer, BUFFER_SIZE);
+		//get through the rest of the stuff
+		data = strtok(NULL, "|");
+		data = strtok(NULL, "|");
+		data = strtok(NULL, "|");
+		data = strtok(NULL, "|");
+		line_count++;
+	}
+	return;
 }
 
 int construct_matrix(char *addr) {
@@ -166,7 +196,7 @@ int construct_matrix(char *addr) {
 		max_err = max_diff(initialVec, resVec, line_count);
 		memcpy(initialVec, resVec, sizeof(double) * line_count);
 	}
-	
+
 	print_vec(initialVec, line_count);
 	printf("################## SOME LINE BREAK HERE #####################----------!!!!!!!!\n");
 	int maximum_index = max_index(initialVec, line_count);

@@ -14,6 +14,9 @@ int main(int argc, char* argv[]) {
   int num_results = NUM_RESULTS;
   if (argc == 3) {
     num_results = atoi(argv[2]);
+    if (num_results > NUM_PAGES) {
+      num_results = NUM_PAGES
+    }
   }
   else if (argc != 2) { //the third is an optional parameter
 		perror("Invalid syntax: driver [filename] (num_results)\n");
@@ -33,7 +36,7 @@ int main(int argc, char* argv[]) {
 
 	//starter messsage
 	char str[80];
-	sprintf(str, "Starting page rank calculation. I got : %.10f", rank_result[0]);  
+	sprintf(str, "Starting page rank calculation. I got : %.10f", rank_result[0]);
 	ui_add_message(NULL, str);
 	int search_session = 1;
 

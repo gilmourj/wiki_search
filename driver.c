@@ -40,12 +40,29 @@ int main(int argc, char* argv[]) {
     }
     else {
       //see if the input is a substring of any name (lowercase everything)
-
-      char* output_message = strcat(message, " is not known to The Avengers");
-      ui_add_message(NULL, output_message);
-      ui_clear_input();
-      free(message);
-      continue;
+      bool found = false;
+      int index = 0;
+      for (int i=0; i<NUM_PAGES; i++) {
+        if (strstr(names[i], message) != NULL) {
+          found = true;
+          index = i;
+          break;
+        }
+      }
+      if (found) {
+        char* output_message = strcat(names[index], " was found");
+        ui_add_message(NULL, output_message);
+        ui_clear_input();
+        free(message);
+        continue;
+      }
+      else {
+        char* output_message = strcat(message, " is not known to The Avengers");
+        ui_add_message(NULL, output_message);
+        ui_clear_input();
+        free(message);
+        continue;
+      }
     }
     //repeat to allow for new search or quit
   }

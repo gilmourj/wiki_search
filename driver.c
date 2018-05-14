@@ -35,12 +35,16 @@ int main(int argc, char* argv[]) {
 	char str[80];
 	sprintf(str, "Starting page rank calculation. I got : %.10f", rank_result[0]);  
 	ui_add_message(NULL, str);
+
   //while running:
   while(true) {
     char* message = ui_read_input();
     for(int i=0; message[i]; i++) {
       message[i] = tolower(message[i]);
     }
+		//list of found relevant pages denoted by their indices
+		int result_pages[10] = {-1};
+		int page_count = 0;
     //find entry point page (matching title)
     if (strcmp(message, "quit") == 0) {
       ui_shutdown();
@@ -49,19 +53,21 @@ int main(int argc, char* argv[]) {
     else {
       //see if the input is a substring of any name (lowercase everything)
       bool found = false;
-      int index = 0;
       for (int i=0; i<NUM_PAGES; i++) {
         if (strstr(names[i], message) != NULL) {
           found = true;
-          index = i;
-          break;
+					result_pages[page_count] = i;
+					page_count++;
         }
       }
       if (found) {
-        char* output_message = strcat(names[index], " was found");
-        ui_add_message(NULL, output_message);
-        ui_clear_input();
-        free(message);
+				for (int i=0; i<page_count; i++) {
+					char output_message[128];
+					sprintf(output_message, "%s was found.", names[result_pages[i]]);
+					ui_add_message(NULL, output_message);
+					ui_clear_input();
+				}
+				free(message);
         continue;
       }
       else {

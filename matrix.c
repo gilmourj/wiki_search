@@ -109,6 +109,7 @@ void get_links(char* addr, char* links[NUM_PAGES]) {
 	while ((len = getline(&buffer, &linecap, csvStream)) > 0 && line_count < NUM_PAGES-1) {
 		char *data = strtok(buffer, "|");
 		data = strtok(NULL, "|");
+		data++; // get rid of quote
 		//make list of links
 		links[line_count] = (char*) malloc(sizeof(char) * BUFFER_SIZE);
 		strncpy(links[line_count], data, strlen(data));

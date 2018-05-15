@@ -16,10 +16,10 @@ if __name__ == "__main__":
             nums.append(links.index(link))
 
         all_nums.append(nums)
-    
+
     #write to csv but pipe deliminated
     with open("avengersclean.csv", 'w') as output:
         w = csv.writer(output, quoting=csv.QUOTE_ALL, delimiter='|')
         for i in range (0, len(all_nums)):
             r = avengers.iloc[i]
-            w.writerow([r[0].lower(), r[1], r[2], r[3], all_nums[i]])
+            w.writerow([r[0].lower(), r[1].strip('"'), r[2], r[3], all_nums[i]])

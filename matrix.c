@@ -111,7 +111,7 @@ void get_links(char* addr, char* links[NUM_PAGES]) {
 		data++; // get rid of quote
 		//make list of links
 		links[line_count] = (char*) malloc(sizeof(char) * BUFFER_SIZE);
-		strncpy(links[line_count], data, strlen(data));
+		strncpy(links[line_count], data, BUFFER_SIZE);
 		line_count++;
 	}
 	return;
@@ -158,7 +158,7 @@ int construct_matrix(char *addr, double initialVec[], outbound_list_t* adjacency
 				// Set the field to 1
 				pageMat[row][data] = 1.0;
 		}
-		free(adjacency_lists[row]);
+		//free(adjacency_lists[row]);
 	}
 
 	double stochastic = (double) (1.0/line_count);

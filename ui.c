@@ -6,7 +6,7 @@
 #include <string.h>
 #include <unistd.h>
 
-#define WIDTH 78
+#define WIDTH 110 //was 72
 #define CHAT_HEIGHT 24
 #define INPUT_HEIGHT 1
 #define USERNAME_DISPLAY_MAX 64

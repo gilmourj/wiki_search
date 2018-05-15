@@ -11,6 +11,15 @@
 #define BUFFER_SIZE 128
 #define NUM_RESULTS 8
 
+int comp (const void * elem1, const void * elem2)
+{
+    int f = ((int)elem1);
+    int s = ((int)elem2);
+    if (f > s) return  1;
+    if (f < s) return -1;
+    return 0;
+}
+
 int main(int argc, char* argv[]) {
   int num_results = NUM_RESULTS;
   if (argc == 3) {
@@ -101,7 +110,7 @@ int main(int argc, char* argv[]) {
           iter++;
         }
         //sort complete results
-        sort_results(page_count-first_batch, &result_pages[first_batch], rank_result);
+        qsort(&result_pages[first_batch], page_count-first_batch, sizeof(int), comp);
         //stop timer
         gettimeofday(&stop, NULL);
         //Welcome screen for each query

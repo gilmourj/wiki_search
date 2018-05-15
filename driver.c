@@ -75,6 +75,32 @@ int main(int argc, char* argv[]) {
         }
       }
       if (found) {
+        //inital sort so that new pages come from top rank
+        sort_results(page_count, result_pages, rank_result);
+        //if not enough pages were found, get more links from the adjacency lists of the top ranked page
+        int iter = 0;
+        while (page_count < num_results) {
+          outbound_list_t* temp_pages = adjacency_lists[result_pages[iter]];
+          int iter2 = 0;
+          while (page_count < num_results && iter2 < temp_pages->size) {
+            //don't allow for repetition
+            int temp_page = temp_pages->data[iter2];
+            bool repetition = false;
+            for (int ii =0; ii < page_count; ii++) {
+              if (result_pages[ii] == temp_page) {
+                repetition = true;
+                break;
+              }
+            }
+            if (!repetition) {
+              result_pages[page_count] = temp_page;
+              page_count++;
+            }
+            iter2++;
+          }
+          iter++;
+        }
+        //sort complete results
         sort_results(page_count, result_pages, rank_result);
 				for (int i=0; i<page_count; i++) {
 					char output_message[256];
@@ -86,6 +112,7 @@ int main(int argc, char* argv[]) {
         continue;
       }
       else {
+        //alert user nothing was found
         char* output_message = strcat(message, " is not known to The Avengers");
 				ui_add_message(NULL, output_message);
         ui_clear_input();

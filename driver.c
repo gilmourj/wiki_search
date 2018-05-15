@@ -72,11 +72,13 @@ int main(int argc, char* argv[]) {
 					page_count++;
         }
       }
+			//Show results if pages are found in database
       if (found) {
         //inital sort so that new pages come from top rank
         sort_results(page_count, result_pages, rank_result);
         //if not enough pages were found, get more links from the adjacency lists of the top ranked page
         int iter = 0;
+				int first_batch = page_count;
         while (page_count < num_results) {
           outbound_list_t* temp_pages = adjacency_lists[result_pages[iter]];
           int iter2 = 0;
@@ -99,7 +101,7 @@ int main(int argc, char* argv[]) {
           iter++;
         }
         //sort complete results
-        sort_results(page_count, result_pages, rank_result);
+        sort_results(page_count-first_batch, &result_pages[first_batch], rank_result);
         //stop timer
         gettimeofday(&stop, NULL);
         //Welcome screen for each query

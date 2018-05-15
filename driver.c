@@ -11,6 +11,7 @@
 #define BUFFER_SIZE 128
 #define NUM_RESULTS 8
 
+
 int main(int argc, char* argv[]) {
   int num_results = NUM_RESULTS;
   if (argc == 3) {
@@ -101,7 +102,7 @@ int main(int argc, char* argv[]) {
           iter++;
         }
         //sort complete results
-        sort_results(page_count-first_batch, &result_pages[first_batch], rank_result);
+        sort_results(page_count-first_batch, result_pages[first_batch], rank_result);
         //stop timer
         gettimeofday(&stop, NULL);
         //Welcome screen for each query

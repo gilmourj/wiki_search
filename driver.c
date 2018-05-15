@@ -70,11 +70,12 @@ int main(int argc, char* argv[]) {
       gettimeofday(&start, NULL);
 			//list of found relevant pages denoted by their indices
 			int result_pages[num_results];
+			memset(result_pages, -1, num_results);
 			int page_count = 0;
       //see if the input is a substring of any name (lowercase everything)
       bool found = false;
       for (int i=0; i<NUM_PAGES; i++) {
-				if (page_count > num_results) break;
+				if (page_count >= num_results) break;
         if (strstr(names[i], message) != NULL && page_count < num_results) {
           found = true;
 					result_pages[page_count] = i;
@@ -109,6 +110,7 @@ int main(int argc, char* argv[]) {
           }
           iter++;
         }
+				if (page_count != num_results) exit(2);
         //sort complete results
         qsort(&result_pages[first_batch], page_count-first_batch, sizeof(int), comp);
         //stop timer

@@ -192,32 +192,15 @@ int construct_matrix(char *addr, double initialVec[], outbound_list_t* adjacency
 	return 0;
 }
 
-void sort_results(int num_results, int result_pages[num_results], double rank_result[NUM_PAGES])
-{
-	int i, page_num, j;
-	double key;
-	for (i = 1; i < num_results; i++)
-	{
-		page_num = result_pages[i];
-		key = rank_result[page_num];
-		j = i-1;
-		while (j >= 0 && rank_result[result_pages[j]] > key)
-		{
-			result_pages[j+1] = result_pages[j];
-			j = j-1;
+
+void sort_results(int num_results, int result_pages[num_results], double rank_result[NUM_PAGES]) {
+	for (int i = 0; i < num_results; i++) {
+		for (int j = 0; j < num_results; j++) {
+			if (rank_result[result_pages[i]] > rank_result[result_pages[j]]) {
+				int temp = result_pages[i];
+				result_pages[i] = result_pages[j];
+				result_pages[j] = temp;
+			}
 		}
-		result_pages[j+1] = page_num;
 	}
 }
-
-// void sort_results(int num_results, int result_pages[num_results], double rank_result[NUM_PAGES]) {
-// 	for (int i = 0; i < num_results; i++) {
-// 		for (int j = 0; j < num_results; j++) {
-// 			if (rank_result[result_pages[i]] > rank_result[result_pages[j]]) {
-// 				int temp = result_pages[i];
-// 				result_pages[i] = result_pages[j];
-// 				result_pages[j] = temp;
-// 			}
-// 		}
-// 	}
-// }

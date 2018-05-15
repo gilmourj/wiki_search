@@ -35,9 +35,8 @@ int main(int argc, char* argv[]) {
   get_names(addr, names);
 
 	//starter messsage
-	char str[80];
-	sprintf(str, "Starting page rank calculation. I got : %.10f", rank_result[0]);
-	ui_add_message(NULL, str);
+	ui_add_message(NULL, "-------------------------- Welcome to HeroRank ---------------------------");
+	ui_add_message(NULL, "-------------- World's Premier Search Engine for the MCU --------------");
 	int search_session = 1;
 
   //while running:
@@ -56,13 +55,14 @@ int main(int argc, char* argv[]) {
 			char initial_msg[50];
 			sprintf(initial_msg, "Search session #%d", search_session);
 			search_session++;
-			ui_add_message("Google 0.5 Presents to you : ", initial_msg);
+			ui_add_message("HeroRank Presents to you : ", initial_msg);
 			//list of found relevant pages denoted by their indices
-			int result_pages[num_results*256];
+			int result_pages[num_results];
 			int page_count = 0;
       //see if the input is a substring of any name (lowercase everything)
       bool found = false;
       for (int i=0; i<NUM_PAGES; i++) {
+				if (page_count > num_results) break;
         if (strstr(names[i], message) != NULL && page_count < num_results) {
           found = true;
 					result_pages[page_count] = i;

@@ -103,10 +103,7 @@ int main(int argc, char* argv[]) {
         //stop timer
         gettimeofday(&stop, NULL);
         //Welcome screen for each query
-        char initial_msg[128];
-        sprintf(initial_msg, "Search session #%d: %d results found in %d microseconds", search_session, num_results, (stop.tv_usec - start.tv_usec));
-        search_session++;
-        ui_add_message(NULL, initial_msg);
+
         //print results
 				for (int i=0; i<page_count; i++) {
 					char output_message[256];
@@ -115,6 +112,10 @@ int main(int argc, char* argv[]) {
 					ui_clear_input();
 				}
 				free(message);
+        char initial_msg[128];
+        sprintf(initial_msg, "Search session #%d: %d results found in %d microseconds", search_session, num_results, (stop.tv_usec - start.tv_usec));
+        search_session++;
+        ui_add_message(NULL, initial_msg);
         continue;
       }
       else {

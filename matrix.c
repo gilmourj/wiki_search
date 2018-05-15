@@ -84,6 +84,11 @@ void get_names(char* addr, char* names[NUM_PAGES]) {
 		//make list of names
 		names[line_count] = (char*) malloc(sizeof(char) * BUFFER_SIZE);
 		strncpy(names[line_count], buffer, BUFFER_SIZE);
+		//get through the rest of the stuff
+		data = strtok(NULL, "|");
+		data = strtok(NULL, "|");
+		data = strtok(NULL, "|");
+		data = strtok(NULL, "|");
 		line_count++;
 	}
 	return;
@@ -104,6 +109,7 @@ void get_links(char* addr, char* links[NUM_PAGES]) {
 	while ((len = getline(&buffer, &linecap, csvStream)) > 0 && line_count < NUM_PAGES-1) {
 		char *data = strtok(buffer, "|");
 		data = strtok(NULL, "|");
+		data++; // get rid of quote
 		//make list of links
 		links[line_count] = (char*) malloc(sizeof(char) * BUFFER_SIZE);
 		strncpy(links[line_count], data, strlen(data));
@@ -128,7 +134,6 @@ int construct_matrix(char *addr, double initialVec[]) {
 	outbound_list_t* adjacency_lists[NUM_PAGES];
 	while ((len = getline(&buffer, &linecap, csvStream)) > 0 && line_count < NUM_PAGES) {
 		char *data = strtok(buffer, "|");
-		//get through the rest of the stuff
 		data = strtok(NULL, "|");
 		data = strtok(NULL, "|");
 		data = strtok(NULL, "|");

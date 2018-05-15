@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <ctype.h>
+#include <sys/time.h>
 
 #include "matrix.h"
 #include "ui.h"
@@ -56,11 +57,8 @@ int main(int argc, char* argv[]) {
       return 0;
     }
     else {
-			//Welcome screen for each query
-			char initial_msg[128];
-			sprintf(initial_msg, "Search session #%d: %d results found in %d milliseconds", search_session, NUM_RESULTS, 1);
-			search_session++;
-			ui_add_message("HeroRank Presents to you : ", initial_msg);
+      struct timeval stop, start;
+      gettimeofday(&start, NULL);
 			//list of found relevant pages denoted by their indices
 			int result_pages[num_results];
 			int page_count = 0;
@@ -102,6 +100,14 @@ int main(int argc, char* argv[]) {
         }
         //sort complete results
         sort_results(page_count, result_pages, rank_result);
+        //stop timer
+        gettimeofday(&stop, NULL);
+        //Welcome screen for each query
+        char initial_msg[128];
+        sprintf(initial_msg, "Search session #%d: %d results found in %d microseconds", search_session, num_results, (stop.tv_usec - start.tv_usec));
+        search_session++;
+        ui_add_message(NULL, initial_msg);
+        //print results
 				for (int i=0; i<page_count; i++) {
 					char output_message[256];
 					sprintf(output_message, "\"http://marvel.wikia.com%s was found with Page Rank of %.8f", links[result_pages[i]], rank_result[result_pages[i]]);

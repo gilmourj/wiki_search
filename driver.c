@@ -41,8 +41,8 @@ int main(int argc, char* argv[]) {
   get_links(addr, links);
 
 	//starter messsage
-	ui_add_message(NULL, "-------------------------- Welcome to HeroRank ---------------------------");
-	ui_add_message(NULL, "-------------- World's Premier Search Engine for the MCU --------------");
+	ui_add_message(NULL, "                -------------------------- Welcome to HeroRank ---------------------------");
+	ui_add_message(NULL, "                -------------- World's Premier Search Engine for the MCU -----------------");
 	int search_session = 0; //zero index search sessions
 
   //while running:

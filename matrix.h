@@ -40,6 +40,10 @@ outbound_list_t* parse_data(char *data);
 
 void get_names(char* addr, char* names[NUM_PAGES]);
 
+void get_links(char* addr, char* links[NUM_PAGES]);
+
 int construct_matrix(char *addr, double initialVec[]);
+
+void sort_results(int num_results, int result_pages[num_results], double rank_result[NUM_PAGES]);
 
 #endif

@@ -30,15 +30,17 @@ int main(int argc, char* argv[]) {
 	double rank_result[NUM_PAGES];
 	//compute Page Rank
   construct_matrix(addr, rank_result);
-  //make_matrix(argv[1]);
+  //get links and names for each page
   char* names[NUM_PAGES];
   get_names(addr, names);
+  char* links[NUM_PAGES];
+  get_links(addr, links);
 
 	//starter messsage
 	char str[80];
-	sprintf(str, "Starting page rank calculation. I got : %.10f", rank_result[0]);
+	sprintf(str, "Welcome to HeroRank search engine");
 	ui_add_message(NULL, str);
-	int search_session = 1;
+	int search_session = 0; //zero-index search sessions
 
   //while running:
   while(true) {
@@ -53,12 +55,12 @@ int main(int argc, char* argv[]) {
     }
     else {
 			//Welcome screen for each query
-			char initial_msg[50];
-			sprintf(initial_msg, "Search session #%d", search_session);
+			char initial_msg[128];
+			sprintf(initial_msg, "Search session #%d: %d results found in %d milliseconds", search_session, NUM_RESULTS, 1);
 			search_session++;
-			ui_add_message("Google 0.5 Presents to you : ", initial_msg);
+			ui_add_message(NULL, initial_msg);
 			//list of found relevant pages denoted by their indices
-			int result_pages[num_results*256];
+			int result_pages[num_results];
 			int page_count = 0;
       //see if the input is a substring of any name (lowercase everything)
       bool found = false;
@@ -70,9 +72,10 @@ int main(int argc, char* argv[]) {
         }
       }
       if (found) {
+        sort_results(num_results, result_pages, rank_result);
 				for (int i=0; i<page_count; i++) {
-					char output_message[128];
-					sprintf(output_message, "%s was found with Page Rank of %.8f", names[result_pages[i]], rank_result[result_pages[i]]);
+					char output_message[256];
+					sprintf(output_message, "http://marvel.wikia.com%s was found with Page Rank of %.8f", links[result_pages[i]], rank_result[result_pages[i]]);
 					ui_add_message(NULL, output_message);
 					ui_clear_input();
 				}

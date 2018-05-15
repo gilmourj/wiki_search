@@ -89,6 +89,29 @@ void get_names(char* addr, char* names[NUM_PAGES]) {
 	return;
 }
 
+void get_links(char* addr, char* links[NUM_PAGES]) {
+	FILE *csvStream = fopen(addr, "r");
+	if (csvStream == NULL) {
+		fprintf(stderr, "Error reading the csv file.");
+		exit(2);
+	}
+	// Allocate line buffer
+	//char buffer[BUFFER_SIZE];
+	char *buffer = NULL;
+	size_t linecap = 0;
+	size_t len;
+	int line_count = 0;
+	while ((len = getline(&buffer, &linecap, csvStream)) > 0 && line_count < NUM_PAGES-1) {
+		char *data = strtok(buffer, "|");
+		data = strtok(NULL, "|");
+		//make list of links
+		links[line_count] = (char*) malloc(sizeof(char) * BUFFER_SIZE);
+		strncpy(links[line_count], data, strlen(data));
+		line_count++;
+	}
+	return;
+}
+
 int construct_matrix(char *addr, double initialVec[]) {
 	// Read CSV file
 	FILE *csvStream = fopen(addr, "r");
@@ -147,7 +170,7 @@ int construct_matrix(char *addr, double initialVec[]) {
 	double stochastic = (double) (1.0/line_count);
 	// Normalize the Matrix!
 	for (int row=0;row<line_count;row++) {
-		if (row_counts[row] == 0) { 
+		if (row_counts[row] == 0) {
 			for (int col=0;col<line_count;col++) {
 				pageMat[row][col] = stochastic;
 			}
@@ -157,7 +180,7 @@ int construct_matrix(char *addr, double initialVec[]) {
 			}
 		}
 	}
-	
+
 	// Create the initial state vector
 	for (int i=0;i<line_count;i++) {
 		initialVec[i] = stochastic;
@@ -173,4 +196,16 @@ int construct_matrix(char *addr, double initialVec[]) {
 	}
 
 	return 0;
+}
+
+void sort_results(int num_results, int result_pages[num_results], double rank_result[NUM_PAGES]) {
+	for (int i = 0; i < 3; i++) {
+		for (int j = 0; j < 3; j++) {
+			if (rank_result[result_pages[i]] > rank_result[result_pages[j]]) {
+				int temp = result_pages[i];
+				result_pages[i] = result_pages[j];
+				result_pages[j] = temp;
+			}
+		}
+	}
 }

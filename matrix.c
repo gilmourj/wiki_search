@@ -52,6 +52,7 @@ int max_index(double v[], int size) {
 	return index;
 }
 
+// Parse list of numbers based on the string input
 outbound_list_t* parse_data(char *data) {
 	char *number;
 	int count = 0;
@@ -77,8 +78,6 @@ void get_names(char* addr, char* names[NUM_PAGES]) {
 	size_t linecap = 0;
 	size_t len;
 	int line_count = 0;
-	// Array of adjacency lists
-	outbound_list_t* adjacency_lists[NUM_PAGES];
 	while ((len = getline(&buffer, &linecap, csvStream)) > 0 && line_count < NUM_PAGES) {
 		char *data = strtok(buffer, "|");
 		//make list of names
@@ -118,7 +117,7 @@ void get_links(char* addr, char* links[NUM_PAGES]) {
 	return;
 }
 
-int construct_matrix(char *addr, double initialVec[]) {
+int construct_matrix(char *addr, double initialVec[], outbound_list_t* adjacency_lists[NUM_PAGES]) {
 	// Read CSV file
 	FILE *csvStream = fopen(addr, "r");
 	if (csvStream == NULL) {
@@ -130,8 +129,6 @@ int construct_matrix(char *addr, double initialVec[]) {
 	size_t linecap = 0;
 	size_t len;
 	int line_count = 0;
-	// Array of adjacency lists
-	outbound_list_t* adjacency_lists[NUM_PAGES];
 	while ((len = getline(&buffer, &linecap, csvStream)) > 0 && line_count < NUM_PAGES) {
 		char *data = strtok(buffer, "|");
 		data = strtok(NULL, "|");

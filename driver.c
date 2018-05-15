@@ -28,11 +28,14 @@ int main(int argc, char* argv[]) {
   char *addr = argv[1];
 	//appropriately sized vector for pageRank calculations
 	double rank_result[NUM_PAGES];
+	// Array of adjacency lists
+	outbound_list_t* adjacency_lists[NUM_PAGES];
 	//compute Page Rank
-  construct_matrix(addr, rank_result);
-  //get links and names for each page
+  construct_matrix(addr, rank_result, adjacency_lists);
+  //get names for each page
   char* names[NUM_PAGES];
   get_names(addr, names);
+	// get links
   char* links[NUM_PAGES];
   get_links(addr, links);
 

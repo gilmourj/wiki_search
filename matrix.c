@@ -159,14 +159,6 @@ int construct_matrix(char *addr, double initialVec[]) {
 		free(adjacency_lists[row]);
 	}
 
-	// Testing
-	for (int j=0;j<line_count;j++) {
-		for (int i=0;i<line_count;i++) {
-			//printf("%.0f", pageMat[j][i]);
-		}
-		//printf("\n");
-	}
-
 	double stochastic = (double) (1.0/line_count);
 	// Normalize the Matrix!
 	for (int row=0;row<line_count;row++) {
@@ -189,7 +181,7 @@ int construct_matrix(char *addr, double initialVec[]) {
 	double resVec[line_count];
 	// Multiply the matrices!!!
 	double max_err = 1.0;
-	while (max_err > .001) {
+	while (max_err > .0001) {
 		multiply_vec(initialVec, pageMat, resVec, line_count);
 		max_err = max_diff(initialVec, resVec, line_count);
 		memcpy(initialVec, resVec, sizeof(double) * line_count);

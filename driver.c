@@ -72,7 +72,7 @@ int main(int argc, char* argv[]) {
         }
       }
       if (found) {
-        sort_results(num_results, result_pages, rank_result);
+        sort_results(page_count, result_pages, rank_result);
 				for (int i=0; i<page_count; i++) {
 					char output_message[256];
 					sprintf(output_message, "\"http://marvel.wikia.com%s was found with Page Rank of %.8f", links[result_pages[i]], rank_result[result_pages[i]]);

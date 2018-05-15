@@ -196,8 +196,8 @@ int construct_matrix(char *addr, double initialVec[]) {
 }
 
 void sort_results(int num_results, int result_pages[num_results], double rank_result[NUM_PAGES]) {
-	for (int i = 0; i < 3; i++) {
-		for (int j = 0; j < 3; j++) {
+	for (int i = 0; i < num_results; i++) {
+		for (int j = 0; j < num_results; j++) {
 			if (rank_result[result_pages[i]] > rank_result[result_pages[j]]) {
 				int temp = result_pages[i];
 				result_pages[i] = result_pages[j];

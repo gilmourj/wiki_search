@@ -28,5 +28,6 @@ References:
 [BeautifulSoup](https://www.crummy.com/software/BeautifulSoup/bs4/doc/#quick-start "BeautifulSoup")  
 [The PageRank Citation Ranking: Bringing Order to the Web](http://ilpubs.stanford.edu:8090/422/1/1999-66.pdf "PageRank")  
 Charlie Curtsinger's UI code for the [Distributed Systems Lab](http://www.cs.grinnell.edu/~curtsinger/teaching/2018S/CSC213/labs/distributed-systems.html "Distributed Systems")  
-GeeksForGeeks - [Program to multiply two matrices](https://www.geeksforgeeks.org/c-program-multiply-two-matrices/ "Matrix Multiplication")  
-UW - [Ranking Web Pages](https://sites.math.washington.edu/~greenbau/Math_498/lecture03_pagerank.pdf "Ranking Web Pages")
+GeeksForGeeks [Program to multiply two matrices](https://www.geeksforgeeks.org/c-program-multiply-two-matrices/ "Matrix Multiplication")  
+User Rerun's description of [qsort](https://stackoverflow.com/questions/1787996/c-library-function-to-do-sort "qsort")  
+UW [Ranking Web Pages](https://sites.math.washington.edu/~greenbau/Math_498/lecture03_pagerank.pdf "Ranking Web Pages")

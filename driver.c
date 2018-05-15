@@ -53,11 +53,6 @@ int main(int argc, char* argv[]) {
       return 0;
     }
     else {
-			//Welcome screen for each query
-			char initial_msg[128];
-			sprintf(initial_msg, "Search session #%d: %d results found in %d milliseconds", search_session, NUM_RESULTS, 1);
-			search_session++;
-			ui_add_message("HeroRank Presents to you : ", initial_msg);
 			//list of found relevant pages denoted by their indices
 			int result_pages[num_results];
 			int page_count = 0;
@@ -65,12 +60,18 @@ int main(int argc, char* argv[]) {
       bool found = false;
       for (int i=0; i<NUM_PAGES; i++) {
 				if (page_count > num_results) break;
-        if (strstr(names[i], message) != NULL && page_count < num_results) {
+        if (strstr(names[i], message) != NULL) {
           found = true;
 					result_pages[page_count] = i;
 					page_count++;
         }
       }
+			//Welcome screen for each query
+			char initial_msg[128];
+			sprintf(initial_msg, "Search session #%d: %d results found in %d milliseconds", search_session, page_count, 1);
+			search_session++;
+			ui_add_message("HeroRank Presents to you", initial_msg);
+			//Display results if anything is found
       if (found) {
         sort_results(page_count, result_pages, rank_result);
 				for (int i=0; i<page_count; i++) {

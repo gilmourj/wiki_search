@@ -18,7 +18,7 @@ From the wiki_search folder:
 \> "earth"  
 *12 results related to earth will be returned*  
 \> "evil"  
-*Only 2 results will be returned since evil is not a popular name*   
+*Only 2 results with evil in their names and 10 results related to those two pages*   
 \> "Charlie Curtsinger"  
 charlie curtsinger is not known to The Avengers *will be displayed*  
 \> "quit"  
